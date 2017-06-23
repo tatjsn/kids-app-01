@@ -1,0 +1,13 @@
+.App__screen {
+  position: relative;
+  width: 100vw;
+  height: 100vw;
+  border: solid black 1px;
+}
+
+.App__ninja {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: url('./ninja.png');
+}
