@@ -16,28 +16,19 @@ class App extends Component {
       },
       ninjas: [
         {
+          name: "0",
           x: 10,
           y: 10,
         },
         {
+          name: "1",
           x: 12,
           y: 12,
         },
         {
-          x: 12,
+          name: "2",
+          x: 13,
           y: 13,
-        },
-        {
-          x: 12,
-          y: 14,
-        },
-        {
-          x: 2,
-          y: 15,
-        },
-        {
-          x: 8,
-          y: 14,
         },
       ],
 
@@ -96,7 +87,7 @@ class App extends Component {
         <div className="App__screen">
           {
             this.state.ninjas.map(nin => (
-              <div className="App__ninja" style={{
+              <div className="App__ninja" key={nin.name} style={{
                 top: `${nin.y * 100 / NUM_GRIDS}%`,
                 left: `${nin.x * 100 / NUM_GRIDS}%`,
               }} />))
