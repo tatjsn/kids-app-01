@@ -3,45 +3,113 @@ import './App.css';
 
 const NUM_GRIDS = 16;
 
+const cropRange = v => (v < 0) ? 0 : ((v >= NUM_GRIDS) ? NUM_GRIDS - 1 : v);
+
 class App extends Component {
   constructor() {
     super();
 
     this.state = {
-      x: 7,
-      y: 7,
-    }
+      hero: {
+        x: 7,
+        y: 7,
+      },
+      ninjas: [
+        {
+          x: 10,
+          y: 10,
+        },
+        {
+          x: 12,
+          y: 12,
+        },
+        {
+          x: 12,
+          y: 13,
+        },
+        {
+          x: 12,
+          y: 14,
+        },
+        {
+          x: 2,
+          y: 15,
+        },
+        {
+          x: 8,
+          y: 14,
+        },
+      ],
 
+    };
+
+    this.randomAllNinjas = this.randomAllNinjas.bind(this);
     this.handleUp = this.handleUp.bind(this);
     this.handleDown = this.handleDown.bind(this);
+    this.handleLeft = this.handleLeft.bind(this);
+    this.handleRight = this.handleRight.bind(this);
+
+    window.setInterval(() => {
+      this.randomAllNinjas();
+    }, 0.5 * 1000);
+  }
+
+  randomAllNinjas() {
+    const ninjas = this.state.ninjas.map(nin => {
+      const isX = Math.random() > 0.5;
+      const isPositive = Math.random() > 0.5;
+      return {
+        x: cropRange(nin.x + (isX ? 1 : 0) * (isPositive ? 1 : -1)),
+        y: cropRange(nin.y + (isX ? 0 : 1) * (isPositive ? 1 : -1)),
+      }
+    });
+    this.setState({ ninjas });
+  }
+
+  moveHero(x, y) {
+    const hero = {
+      x: cropRange(this.state.hero.x + x),
+      y: cropRange(this.state.hero.y + y),
+    }
+    this.setState({ hero });    
   }
 
   handleUp() {
-    if (this.state.y === 0) return;
-
-    const y = this.state.y - 1;
-    this.setState({ y });
+    this.moveHero(0, -1);
   }
 
-
   handleDown() {
-    if (this.state.y === NUM_GRIDS - 1) return;
+    this.moveHero(0, 1);
+  }
 
-    const y = this.state.y + 1;
-    this.setState({ y });
+  handleLeft() {
+    this.moveHero(-1, 0);
+  }
+
+  handleRight() {
+    this.moveHero(1, 0);
   }
 
   render() {
     return (
       <div className="App">
         <div className="App__screen">
-          <div className="App__ninja" style={{
-            top: `${this.state.y * 100 / NUM_GRIDS}%`,
-            left: `${this.state.x * 100 / NUM_GRIDS}%`,
-          }}/>
+          {
+            this.state.ninjas.map(nin => (
+              <div className="App__ninja" style={{
+                top: `${nin.y * 100 / NUM_GRIDS}%`,
+                left: `${nin.x * 100 / NUM_GRIDS}%`,
+              }} />))
+          }
+          <div className="App__hero" style={{
+            top: `${this.state.hero.y * 100 / NUM_GRIDS}%`,
+            left: `${this.state.hero.x * 100 / NUM_GRIDS}%`,
+          }} />
         </div>
-        <button onClick={this.handleUp}>Up</button>
-        <button onClick={this.handleDown}>Down</button>
+        <button onTouchStart={this.handleUp}>うえ</button>
+        <button onTouchStart={this.handleDown}>した</button>
+        <button onTouchStart={this.handleLeft}>ひだり</button>
+        <button onTouchStart={this.handleRight}>みぎ</button>
       </div>
     );
   }

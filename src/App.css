@@ -11,3 +11,10 @@
   height: 16px;
   background: url('./ninja.png');
 }
+
+.App__hero {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: url('./hage.png');
+}
